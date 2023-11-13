@@ -1,0 +1,679 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>1.데이터 모델링의 이해 </title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-interactiveBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="2032f960-cdf5-4b6e-abe5-d288d79871d0" class="page sans"><header><h1 class="page-title">1.데이터 모델링의 이해 </h1><p class="page-description"></p></header><div class="page-body"><p id="6b3c7c52-0f9d-4db3-a923-e9f745d544f7" class="">
+</p><ul id="bd67e432-203e-4a3c-9f9d-573ab35dae38" class="bulleted-list"><li style="list-style-type:disc">데이터 모델링이 필요한 주요 이유 <ul id="3a2c8f42-afd1-4f61-8bf8-47d38c959743" class="bulleted-list"><li style="list-style-type:circle">업무정보를 구성하는 정보들을 표기법으로 정보시스템 구축의 대상이 되는 업무를 분석</li></ul><ul id="8368ff7d-4f43-4683-9188-e67833169e84" class="bulleted-list"><li style="list-style-type:circle">분석된 모델을 가지고 실제 데이터베이스를 생성하여 개발 및 데이터관리에 사용하는것<ul id="774b598a-df2c-418c-9c7b-346e55079731" class="bulleted-list"><li style="list-style-type:square">데이터 모델링은 데이터베이스만 구축하는 것이 아닌 데이터모델링 자체로서 업무를 설명하는 부분에도 중요함</li></ul></li></ul></li></ul><hr id="9c3d4b3e-4dbb-4836-a798-ac68eb858499"/><ul id="9400b488-9770-4a05-8587-d6ba37900f43" class="bulleted-list"><li style="list-style-type:disc">데이터 모델링을 할때 유의할 사항<ul id="3abbe0a6-8d91-4c39-96c9-4cb7adfe2d48" class="bulleted-list"><li style="list-style-type:circle">중복 되면 안된다.</li></ul><ul id="8d327d2e-959d-4967-a0be-a2ec28d47e1c" class="bulleted-list"><li style="list-style-type:circle">비유연성<ul id="40fb2fdb-6d84-415b-b314-48b1da3ebfeb" class="bulleted-list"><li style="list-style-type:square">수시로 변경되면 유지보수 어려움</li></ul></li></ul><ul id="bcafcd59-c4f3-411e-9156-a38d55b190ed" class="bulleted-list"><li style="list-style-type:circle">비일관성<ul id="7ee3eb2b-809b-4ec7-af00-590175fa13b1" class="bulleted-list"><li style="list-style-type:square">데이터는 항상같아야한다.(상호 연관관계가 명확해야한다.)</li></ul></li></ul></li></ul><hr id="8153cefe-7d2d-45fe-8f45-79b1381dd88e"/><ul id="e033c87c-ee53-40b4-9b1d-8bb33d019296" class="bulleted-list"><li style="list-style-type:disc">데이터 스키마구조 <ul id="d76795f2-345b-4f3d-b948-8c80e3a504d0" class="bulleted-list"><li style="list-style-type:circle">외부스키마<ul id="8b8938f1-a3a8-4aff-8087-819700046cf0" class="bulleted-list"><li style="list-style-type:square">외부사용자</li></ul></li></ul><ul id="8592584d-8f3c-4e11-a849-1c08440b82d1" class="bulleted-list"><li style="list-style-type:circle">개념스키마 <ul id="c1925d96-768f-4f35-b7f6-c5b53cd3bd53" class="bulleted-list"><li style="list-style-type:square">사용자 모든관점 통합</li></ul></li></ul><ul id="5bdf93fc-4493-49ab-a125-412a74c8a3cb" class="bulleted-list"><li style="list-style-type:circle">내부스키마<ul id="8db77788-8cc2-45ce-b2da-85b5490cfb53" class="bulleted-list"><li style="list-style-type:square">내부 데이터베이스 </li></ul></li></ul></li></ul><hr id="09cd1ba9-019c-4098-8f72-9ae12b7e670d"/><ul id="b0a669bd-731e-4273-9262-be9a7b5da26e" class="bulleted-list"><li style="list-style-type:disc">엔터티<ul id="84b351d9-86ae-45cb-a080-1d07c6bd1164" class="bulleted-list"><li style="list-style-type:circle">엔터티는 2개이상의 속성과 2개이상의 인스턴스가 있어야 자격이됨</li></ul><ul id="9b34ea12-d380-4e74-9cdb-fcb91e3b6ef6" class="bulleted-list"><li style="list-style-type:circle">엔터티 <ul id="42f6a539-4baa-4602-a05f-98187e7ab889" class="bulleted-list"><li style="list-style-type:square">테이블</li></ul></li></ul><ul id="45cfb4af-ffc3-49df-8b62-9baa84c04d4d" class="bulleted-list"><li style="list-style-type:circle">속성<ul id="e3fdaed4-3527-4747-97fd-c3c515550658" class="bulleted-list"><li style="list-style-type:square">컬럼 (이름, 주소)</li></ul></li></ul><ul id="90324f58-ad78-40ad-94f8-81d1d611d524" class="bulleted-list"><li style="list-style-type:circle">속성값 <ul id="bc8f76e5-7e8d-449a-8dea-8a38df736fd8" class="bulleted-list"><li style="list-style-type:square">한셀의 값 (이한규,신림동 1개 값)</li></ul></li></ul><ul id="3a9344a8-9f8c-427c-a4cf-f0aa14a86500" class="bulleted-list"><li style="list-style-type:circle">인스턴스<ul id="03542a0f-3aab-43cf-842b-7d2a6c353094" class="bulleted-list"><li style="list-style-type:square">로우 (이한규, 신림동, 26) 한줄 </li></ul><ul id="1b2eabba-258b-4a88-b8a2-baeb769c7947" class="bulleted-list"><li style="list-style-type:square">아래로 따지자면 한로우로 2, 악순이, 1989 하나의 줄을 말함<figure id="409c5d1d-12d2-40bf-92d7-e8231a2aa480" class="image"><a href="1%20%E1%84%83%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%90%E1%85%A5%20%E1%84%86%E1%85%A9%E1%84%83%E1%85%A6%E1%86%AF%E1%84%85%E1%85%B5%E1%86%BC%E1%84%8B%E1%85%B4%20%E1%84%8B%E1%85%B5%E1%84%92%E1%85%A2%202032f960cdf54b6eabe5d288d79871d0/Untitled.png"><img style="width:600px" src="1%20%E1%84%83%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%90%E1%85%A5%20%E1%84%86%E1%85%A9%E1%84%83%E1%85%A6%E1%86%AF%E1%84%85%E1%85%B5%E1%86%BC%E1%84%8B%E1%85%B4%20%E1%84%8B%E1%85%B5%E1%84%92%E1%85%A2%202032f960cdf54b6eabe5d288d79871d0/Untitled.png"/></a></figure></li></ul><ul id="b2a33030-d9d3-41df-9ba2-70c3b67d9888" class="bulleted-list"><li style="list-style-type:square">연관관계</li></ul><figure id="778d325f-3f73-4f7e-901b-cb03d7f6c7fc" class="image"><a href="1%20%E1%84%83%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%90%E1%85%A5%20%E1%84%86%E1%85%A9%E1%84%83%E1%85%A6%E1%86%AF%E1%84%85%E1%85%B5%E1%86%BC%E1%84%8B%E1%85%B4%20%E1%84%8B%E1%85%B5%E1%84%92%E1%85%A2%202032f960cdf54b6eabe5d288d79871d0/Untitled%201.png"><img style="width:577px" src="1%20%E1%84%83%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%90%E1%85%A5%20%E1%84%86%E1%85%A9%E1%84%83%E1%85%A6%E1%86%AF%E1%84%85%E1%85%B5%E1%86%BC%E1%84%8B%E1%85%B4%20%E1%84%8B%E1%85%B5%E1%84%92%E1%85%A2%202032f960cdf54b6eabe5d288d79871d0/Untitled%201.png"/></a></figure></li></ul></li></ul><hr id="af3da757-449e-470b-98a7-750cc28fe7b0"/><ul id="5e4a0372-8d00-4cce-808b-d38be1bc14b9" class="bulleted-list"><li style="list-style-type:disc">엔터티의 특징<ul id="ce86b0a9-77c4-4cd8-a875-5353c821e062" class="bulleted-list"><li style="list-style-type:circle">업무에서 필요한 정보</li></ul><ul id="47dedb6c-2173-42ef-84aa-c05d20915146" class="bulleted-list"><li style="list-style-type:circle">유일한 식별자에 의해 식별가능</li></ul><ul id="4f3387b0-3a78-492c-b219-3701c82d303e" class="bulleted-list"><li style="list-style-type:circle">두개이상 인스턴스 집합</li></ul><ul id="03c84cf5-7b5f-4d4f-b107-f1ea65b960eb" class="bulleted-list"><li style="list-style-type:circle">업무 프로세스에 이용</li></ul><ul id="63c227ac-fb50-473d-a377-e57aece4f8e5" class="bulleted-list"><li style="list-style-type:circle">반드시 속성이 필요</li></ul><ul id="99f52787-98ec-4fe9-bc67-92a582316e7f" class="bulleted-list"><li style="list-style-type:circle">엔터티는 한개이상의 관계필요</li></ul></li></ul><hr id="a10a201b-3a03-44dd-8a35-0078362ac9eb"/><ul id="dbfbc5e5-03dd-46fa-a4c2-ddd16e1edb58" class="bulleted-list"><li style="list-style-type:disc">속성의 특징<ul id="302627f5-f11b-4b75-89f6-c886ef25f09e" class="bulleted-list"><li style="list-style-type:circle">기본<ul id="5fce24ae-d550-4a15-9b90-e17011dde1fc" class="bulleted-list"><li style="list-style-type:square">원래값</li></ul><ul id="14b16230-6f1f-49f4-8ad4-ceba0c7e7ae4" class="bulleted-list"><li style="list-style-type:square">일반</li></ul></li></ul><ul id="263e32c4-4e0c-45d9-a1e5-148866d5e91d" class="bulleted-list"><li style="list-style-type:circle">설계<ul id="846104d1-b6de-4646-9f47-14f138fc10a2" class="bulleted-list"><li style="list-style-type:square">업무 규칙으로 만들어진 값</li></ul><ul id="5b5c8cce-9ee1-4fb0-a1ee-f4028ab03ea9" class="bulleted-list"><li style="list-style-type:square">분류</li></ul></li></ul><ul id="4486ce80-a2f8-4db4-bf95-ed8339910394" class="bulleted-list"><li style="list-style-type:circle">파생<ul id="5c3fe61e-6372-40c4-ab4b-36ac2b99dcbc" class="bulleted-list"><li style="list-style-type:square">속성값을 게산하여 저장할수 있도록 만든 파생속성</li></ul><ul id="81bedf5d-c168-4eca-8fe1-60406366e8a7" class="bulleted-list"><li style="list-style-type:square">계산</li></ul></li></ul></li></ul><hr id="45697f49-31f5-41f0-9f24-0ccc02a4a680"/><ul id="60433e0a-209d-4d60-b126-9109f6daeaef" class="bulleted-list"><li style="list-style-type:disc">도메인<ul id="05decd4c-3ffe-4245-8aad-37f695798e6e" class="bulleted-list"><li style="list-style-type:circle">정수의 10자리</li></ul><ul id="8133aad9-6148-404f-ad48-c298b68c26e2" class="bulleted-list"><li style="list-style-type:circle">문자의 30자리 </li></ul><ul id="df3c591b-fc02-45fa-b145-8da015042428" class="bulleted-list"><li style="list-style-type:circle">속성의 범위설정</li></ul></li></ul><hr id="366df6fd-bb4e-47c9-9b0a-0944e5eea709"/><ul id="59421700-a9a1-4494-8bf6-9a3c304b83eb" class="bulleted-list"><li style="list-style-type:disc">속성의 명칭부여<ul id="6f49c7bb-80f9-4db7-b7f7-5dcde8ec44f0" class="bulleted-list"><li style="list-style-type:circle">애매모호 금지</li></ul><ul id="41ffdd74-91b0-44b8-818a-06b2ad27c149" class="bulleted-list"><li style="list-style-type:circle">복합명사 사용</li></ul><ul id="baae6d78-e5ec-42de-8bec-7f0e1328d15d" class="bulleted-list"><li style="list-style-type:circle">유일성(테이블마다 속성명 같으면 안됨)</li></ul><ul id="a44a492a-3dff-4359-b175-2f980b8213b8" class="bulleted-list"><li style="list-style-type:circle">이래야 반정규화, 통합때 혼란 방지 가능</li></ul></li></ul><hr id="cfe7c72a-5e92-42bd-90cc-43b85a10f728"/><ul id="ff0d0444-1a06-46ce-a575-f30b3174dbea" class="bulleted-list"><li style="list-style-type:disc">데이터 모델링 관계<ul id="d94d5b12-570e-4959-ba2b-51b90441ae25" class="bulleted-list"><li style="list-style-type:circle">존재에 의한 관계<ul id="747550e2-befc-4bc3-a9af-ae8901ed4fcd" class="bulleted-list"><li style="list-style-type:square">실선</li></ul></li></ul><ul id="d61bedec-7381-4bdc-836b-7d1825224bde" class="bulleted-list"><li style="list-style-type:circle">행위에 의한 관계<ul id="fb4a3635-8bae-4d87-8bb5-a93af18c6654" class="bulleted-list"><li style="list-style-type:square">점선</li></ul></li></ul><ul id="fb767450-96b9-4748-822f-3ef55ca659ce" class="bulleted-list"><li style="list-style-type:circle">UML<ul id="f6ca50d6-2d9b-4c22-b18f-8364fce1aa69" class="bulleted-list"><li style="list-style-type:square">연관관계, 의존관계 구분 X </li></ul></li></ul></li></ul><hr id="7ceac9f6-8762-4937-a378-2bd0b55ce888"/><ul id="0e3eae28-78ae-450d-9389-6ab6265b6c00" class="bulleted-list"><li style="list-style-type:disc">관계 3가지 개념<ul id="6d8784ba-0b79-4bb0-9c75-6583a04ccfb2" class="bulleted-list"><li style="list-style-type:circle">관계명</li></ul><ul id="51462d46-3846-4b3f-b2b5-8cf0b9176f9a" class="bulleted-list"><li style="list-style-type:circle">관계차수</li></ul><ul id="c33cd5d9-9c7a-46dd-9b3c-7809d5cfc19a" class="bulleted-list"><li style="list-style-type:circle">선택성</li></ul></li></ul><hr id="c1208553-970d-40f6-b328-a07963d598b0"/><ul id="123a4030-b8f3-44ea-9779-dab1c7b187f1" class="bulleted-list"><li style="list-style-type:disc">식별자 종류<ul id="dbffd804-9512-42cd-b1a2-eda3271593df" class="bulleted-list"><li style="list-style-type:circle">기본키 중간선 위에 있는것만 따지는것임 ㅇㅋ??</li></ul><p id="56e7e01f-15d6-44af-aa76-b8239c4e7708" class="">
+</p><ul id="f564c8cc-4653-4ee9-86dc-809a95887782" class="bulleted-list"><li style="list-style-type:circle">주식별자 VS 보조식별자<ul id="87275891-71d9-469b-9b79-bc88534caa9f" class="bulleted-list"><li style="list-style-type:square">엔터티내 대표성을 구분</li></ul></li></ul><ul id="21d5dce5-0c62-4436-99f9-120473344389" class="bulleted-list"><li style="list-style-type:circle">내부식별자 VS 외부식별자<ul id="5511c00d-f86b-4616-8df4-9cef981862b0" class="bulleted-list"><li style="list-style-type:square">엔터티내 스스로 생성되었는지 구분 </li></ul></li></ul><ul id="4814d51b-049a-4478-b157-6503450287f9" class="bulleted-list"><li style="list-style-type:circle">단일식별자 VS 복합식별자<ul id="5cae0e01-5442-4093-9a2a-adf28dacd1c7" class="bulleted-list"><li style="list-style-type:square">단일 속성인지 유무</li></ul></li></ul><ul id="71773996-2acf-4a9a-83b7-3a9bc6f96524" class="bulleted-list"><li style="list-style-type:circle">본질식별자 VS 인조식별자<ul id="93b25185-0cef-442d-b3a0-5766c86cb03b" class="bulleted-list"><li style="list-style-type:square">원래 있던 의미</li></ul><ul id="f3da43d4-e3a5-43ea-b59a-1dc84fb44cbc" class="bulleted-list"><li style="list-style-type:square">일련번호로 분류하여 새롭게 만든 식별자</li></ul></li></ul><figure id="70e45f8e-0aa3-44fb-82b9-924ac870e875" class="image"><a href="1%20%E1%84%83%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%90%E1%85%A5%20%E1%84%86%E1%85%A9%E1%84%83%E1%85%A6%E1%86%AF%E1%84%85%E1%85%B5%E1%86%BC%E1%84%8B%E1%85%B4%20%E1%84%8B%E1%85%B5%E1%84%92%E1%85%A2%202032f960cdf54b6eabe5d288d79871d0/Untitled%202.png"><img style="width:438px" src="1%20%E1%84%83%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%90%E1%85%A5%20%E1%84%86%E1%85%A9%E1%84%83%E1%85%A6%E1%86%AF%E1%84%85%E1%85%B5%E1%86%BC%E1%84%8B%E1%85%B4%20%E1%84%8B%E1%85%B5%E1%84%92%E1%85%A2%202032f960cdf54b6eabe5d288d79871d0/Untitled%202.png"/></a></figure></li></ul><hr id="ca789035-cfc7-44f9-ac7e-1fcd9d8bd260"/><ul id="b4d07c71-e0f9-4b77-8987-4ef3eca37aa4" class="bulleted-list"><li style="list-style-type:disc">식별자 선정<ul id="1401d8dc-c93d-4117-8341-7ed1ee82a169" class="bulleted-list"><li style="list-style-type:circle">명칭, 내역, 이름은 중복성이 생길수 있어 안됨</li></ul></li></ul><hr id="153d6803-baf9-4283-b028-76b4d636bb37"/><ul id="4d6ff93e-607b-4de1-8988-2a3c8dbd1ca3" class="bulleted-list"><li style="list-style-type:disc">주식별자의 특징<ul id="808de5ca-0fa8-4edd-94e2-b6d05689fc67" class="bulleted-list"><li style="list-style-type:circle">유일성<ul id="c6199766-7e69-4ac5-9111-f2969b857a5e" class="bulleted-list"><li style="list-style-type:square">인스턴스를 유일하게 구분함</li></ul><ul id="c66b93fe-9526-4e02-9637-a1d66e22230d" class="bulleted-list"><li style="list-style-type:square">(사람이란 인스턴스에 주민번호같이 구분)</li></ul></li></ul><ul id="59c09d86-03a4-4140-baa0-854eeac3b21a" class="bulleted-list"><li style="list-style-type:circle">최소성<ul id="67ef6e66-4c5c-4706-8703-70e2a2459299" class="bulleted-list"><li style="list-style-type:square">주식별자의 속성의 수는 최소한으로</li></ul><ul id="60998122-fe4f-4bd1-b32c-4b119ad7924b" class="bulleted-list"><li style="list-style-type:square">(복합으로 많으면 성능저하)</li></ul></li></ul><ul id="babff7fe-b7f8-43b0-8e92-5220dc67ecbc" class="bulleted-list"><li style="list-style-type:circle">불변성 <ul id="5d774fab-212c-4cb7-a443-bbb27dedfe33" class="bulleted-list"><li style="list-style-type:square">주식별자가 지정되면 변하지않아야함</li></ul><ul id="e12963c9-a594-440f-8648-d41bcd6e17b2" class="bulleted-list"><li style="list-style-type:square">(주민번호 안변함)</li></ul></li></ul><ul id="6307162f-78b7-4545-970d-bc52625e368e" class="bulleted-list"><li style="list-style-type:circle">존재성<ul id="84145332-aa34-4d73-b60f-7d5065b77712" class="bulleted-list"><li style="list-style-type:square">주식별자가 지정되면 NULL 안됨</li></ul></li></ul></li></ul><hr id="1522b8bc-e34e-4639-97f3-356732de27f8"/><ul id="b30bb539-3841-42f9-a89e-51d91c08a39b" class="bulleted-list"><li style="list-style-type:disc">식별자와 비식별자 관계<ul id="a84d70cf-3013-4aab-a598-d0dac122eab0" class="bulleted-list"><li style="list-style-type:circle">기본키와 외래키 같은느낌임<ul id="122eae88-8863-4136-b408-d5559f622332" class="bulleted-list"><li style="list-style-type:square">기본키<ul id="90ccb4ab-fccb-42c6-a27b-6ca4cb68c5f0" class="bulleted-list"><li style="list-style-type:disc">유일한 값</li></ul></li></ul><ul id="23662176-afe3-4230-80a2-7133d99a3313" class="bulleted-list"><li style="list-style-type:square">외래키<ul id="4cbdae4c-09a1-4adf-99a0-adc2b1d63e65" class="bulleted-list"><li style="list-style-type:disc">참조관계의 집합</li></ul><ul id="59eaa103-e1b1-4ece-8ac8-2369c94cf9f3" class="bulleted-list"><li style="list-style-type:disc">외래키의 식별자 (주키 → 주키AND외래키)<ul id="5cb58a24-d4eb-46bb-800c-54a992f469c0" class="bulleted-list"><li style="list-style-type:circle">주식별자나 보조식별자만 가능</li></ul></li></ul><ul id="eb59f172-dee7-4efa-a32b-f2172e1fe0ff" class="bulleted-list"><li style="list-style-type:disc">외래키의 비식별자 (주키 → 외래키)<ul id="3d3e24d4-a3ff-40cb-83bf-50ea21c23c93" class="bulleted-list"><li style="list-style-type:circle">선택적인 관계</li></ul></li></ul></li></ul></li></ul><figure id="0e048036-0fb4-4d82-a6b4-d000587dffb2" class="image"><a href="1%20%E1%84%83%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%90%E1%85%A5%20%E1%84%86%E1%85%A9%E1%84%83%E1%85%A6%E1%86%AF%E1%84%85%E1%85%B5%E1%86%BC%E1%84%8B%E1%85%B4%20%E1%84%8B%E1%85%B5%E1%84%92%E1%85%A2%202032f960cdf54b6eabe5d288d79871d0/Untitled%203.png"><img style="width:407px" src="1%20%E1%84%83%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%90%E1%85%A5%20%E1%84%86%E1%85%A9%E1%84%83%E1%85%A6%E1%86%AF%E1%84%85%E1%85%B5%E1%86%BC%E1%84%8B%E1%85%B4%20%E1%84%8B%E1%85%B5%E1%84%92%E1%85%A2%202032f960cdf54b6eabe5d288d79871d0/Untitled%203.png"/></a></figure></li></ul><hr id="d52f7069-6e6b-4024-95f3-319550fb4bc1"/><ul id="f3ca8813-87c3-43ce-b32f-79da5ac60c74" class="bulleted-list"><li style="list-style-type:disc">성능 데이터 모델링<ul id="52120bb1-8b6a-45f0-b174-3cdd1e369a47" class="bulleted-list"><li style="list-style-type:circle">분석설계 단계에서 데이터베이스 처리 성능을 향상 방법<ul id="50b2b00f-ecd3-46e5-85f3-5afd017e6f6f" class="bulleted-list"><li style="list-style-type:square">테스트 환경을 구현하고 그곳에 트랜젝션을 발생시켜 실제 성능을 테스트 해보아야한다.</li></ul><ul id="88755afc-1dd4-4ae0-baf3-0c909d7e78fe" class="bulleted-list"><li style="list-style-type:square">데이터모델의 구조를 변경하면서 어떠한 구조가 해당 사이트에 성능상 가장 적절한 구조인지 검토</li></ul><ul id="d22733e5-64bd-4cfe-926c-c3fe1b66cd1c" class="bulleted-list"><li style="list-style-type:square">성능과 sql 튜닝은 무관함</li></ul></li></ul></li></ul><hr id="82ce1afe-44f2-4720-b3d9-fa3ca79394dc"/><ul id="426a9b04-574d-442f-95a2-0980733d3a3e" class="bulleted-list"><li style="list-style-type:disc">성능을 고려한 데이터 모델링의 순서<ol type="1" id="acea88c6-0718-4eb2-bddc-c640b96ce071" class="numbered-list" start="1"><li>데이터 모델링할 때 정규화를 정확하게 수행 </li></ol><ol type="1" id="61e499ff-06b1-4130-a1bb-183af853e667" class="numbered-list" start="2"><li>데이터베이스 용량산정 수행</li></ol><ol type="1" id="74b70178-2e58-4968-a6cd-679f5171ea6d" class="numbered-list" start="3"><li>데이터베이스에 발생되는 트랜잭션의 유형을 파악</li></ol><ol type="1" id="4b6d54e0-8a02-4b4e-bd7b-149cdfe038fb" class="numbered-list" start="4"><li>용량과 트랜잭션의 유형에 따라 반정규화 수행</li></ol><ol type="1" id="9c250d80-2ba6-4550-8f46-f774d1ef1956" class="numbered-list" start="5"><li>이력모델 조정, <a href="http://PK.FK">PK.FK</a> 조정, 슈퍼타입, 서브타입 조정등 ㅜ행</li></ol><ol type="1" id="8984ecca-31ea-422d-8973-d8fac7bfaa97" class="numbered-list" start="6"><li>성능관점에서 데이터모델 검증</li></ol></li></ul><hr id="490446ab-5c20-4d46-b38c-1a58922a65ee"/><ul id="17762443-c49b-476a-88c2-0cb906d056ad" class="bulleted-list"><li style="list-style-type:disc">1차정규화 대상<ul id="5ee69f48-d5d9-4ddf-b666-21f196eb5161" class="bulleted-list"><li style="list-style-type:circle">컬럼의 반복적인 형태로 원자성을 위배한 1차 정규화 대상 </li></ul><ul id="f09a183c-d5b5-44a0-8264-a79b677801a2" class="bulleted-list"><li style="list-style-type:circle">이와같은경우 입력, 수정,삭제 성능저하 됨</li></ul><ul id="1ecc01ee-fbf3-4cf2-9a7f-cf7c52923e67" class="bulleted-list"><li style="list-style-type:circle">1차 정규화 수행후 인덱스 적용</li></ul><figure id="cbba5482-4dd9-40a3-91b6-5ada246592e8" class="image"><a href="1%20%E1%84%83%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%90%E1%85%A5%20%E1%84%86%E1%85%A9%E1%84%83%E1%85%A6%E1%86%AF%E1%84%85%E1%85%B5%E1%86%BC%E1%84%8B%E1%85%B4%20%E1%84%8B%E1%85%B5%E1%84%92%E1%85%A2%202032f960cdf54b6eabe5d288d79871d0/Untitled%204.png"><img style="width:330px" src="1%20%E1%84%83%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%90%E1%85%A5%20%E1%84%86%E1%85%A9%E1%84%83%E1%85%A6%E1%86%AF%E1%84%85%E1%85%B5%E1%86%BC%E1%84%8B%E1%85%B4%20%E1%84%8B%E1%85%B5%E1%84%92%E1%85%A2%202032f960cdf54b6eabe5d288d79871d0/Untitled%204.png"/></a></figure></li></ul><hr id="ce686043-50c1-42fe-9c95-5f63470af490"/><ul id="3d58b9b4-2ab4-4533-89e8-576052b9b245" class="bulleted-list"><li style="list-style-type:disc">반정규화<ul id="17788bb1-3bb4-4fa0-9593-17451888ec57" class="bulleted-list"><li style="list-style-type:circle">컬럼을 자주 이용하는 집중화된 컬럼이 있을때 컬럼들을 별도로 모으는것은 테이블추가 부분테이블 추가 이다</li></ul><figure id="fc2a1cc9-f8d9-4b27-b394-f4220b15f99e" class="image"><a href="1%20%E1%84%83%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%90%E1%85%A5%20%E1%84%86%E1%85%A9%E1%84%83%E1%85%A6%E1%86%AF%E1%84%85%E1%85%B5%E1%86%BC%E1%84%8B%E1%85%B4%20%E1%84%8B%E1%85%B5%E1%84%92%E1%85%A2%202032f960cdf54b6eabe5d288d79871d0/Untitled%205.png"><img style="width:439px" src="1%20%E1%84%83%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%90%E1%85%A5%20%E1%84%86%E1%85%A9%E1%84%83%E1%85%A6%E1%86%AF%E1%84%85%E1%85%B5%E1%86%BC%E1%84%8B%E1%85%B4%20%E1%84%8B%E1%85%B5%E1%84%92%E1%85%A2%202032f960cdf54b6eabe5d288d79871d0/Untitled%205.png"/></a></figure></li></ul><hr id="a5f844bf-0f25-448c-9358-b91f54610a1e"/><ul id="d998b708-7916-44fe-b4e5-46157953fc50" class="bulleted-list"><li style="list-style-type:disc">SQL문에서 조회를 빠르게 수행하려면 테이블을 전부 통합하여 조회한다.</li></ul><hr id="4b3eaa13-c6b4-4dbe-94d3-5b5256ee32b5"/><ul id="a3c2d9fe-7457-4dac-a5eb-93ec2adfb83e" class="bulleted-list"><li style="list-style-type:disc">전체가 아닌 최근 변경된 값만 골라서 조회의 겨우 성능이 저하되서 나온다</li></ul><hr id="39eb1a6f-37ab-4d19-afae-32b9d18051d9"/><ul id="2d0218ae-82d8-42c3-b1c0-6b3f346757f0" class="bulleted-list"><li style="list-style-type:disc">컬럼이 많은 테이블<ul id="a41075cb-aeab-4c22-8335-04423169800d" class="bulleted-list"><li style="list-style-type:circle">디스크I/O가 대량으로 발생하여 성능저하</li></ul><ul id="afc71340-b238-4ba9-8d45-c177963ba50b" class="bulleted-list"><li style="list-style-type:circle">개선<ul id="66177fa5-a885-4449-aaf6-1319bd5f0c65" class="bulleted-list"><li style="list-style-type:square">트랜잭션이 접근하는 칼럼 유형을 분석해서 빈도수 높은 칼럼과 낮은 칼럼을  1대1로 테이블 분리</li></ul><ul id="a3ee991d-f501-44e9-b775-0a64bdf0e306" class="bulleted-list"><li style="list-style-type:square">데이터가 채워진 칼럼을 앞으로 NULL이 분포된것은 뒤로<ul id="a8d00f2b-04b6-4aa7-91bf-4e5a27543cc1" class="bulleted-list"><li style="list-style-type:disc">하지만 NULL값이 갑자기 채워진다면 로우체인발생</li></ul></li></ul></li></ul></li></ul><hr id="e387ba80-c4c6-4d04-afa8-df795bf33767"/><ul id="f9e29fbd-e77b-4306-ac0e-db8e7c452391" class="bulleted-list"><li style="list-style-type:disc">파티셔닝<ul id="1873c24b-bdbf-48e8-ac44-28d8d24bc28b" class="bulleted-list"><li style="list-style-type:circle">데이터 엑세스 향상</li></ul><ul id="403e7484-141b-4f63-9977-d4947153ec22" class="bulleted-list"><li style="list-style-type:circle">논리적으로 하나의 테이블</li></ul><ul id="c55819b3-8692-47c8-8a55-81000ca259c6" class="bulleted-list"><li style="list-style-type:circle">물리적으로 여러개의 테이블로 분리한 기법</li></ul></li></ul><hr id="e0287f2d-2a68-49d9-9f40-807845f5b85e"/><ul id="69883f20-8ae3-4160-b25b-f53bb831c1cd" class="bulleted-list"><li style="list-style-type:disc">트랜잭션<ul id="abe76c9b-ff38-4277-ab75-2856f7e39f71" class="bulleted-list"><li style="list-style-type:circle">항상 전체를 통합형 분석처리</li></ul><ul id="54cef239-9eff-4d42-a002-c5fd043b5b68" class="bulleted-list"><li style="list-style-type:circle">슈퍼-서브타입이 하나의 테이블로 통합되어있으면 테이블에 연결된 데이터만 읽어 다른 형식에 비해 성능이 우수</li></ul></li></ul><p id="6e3dd232-e3ed-461f-ae99-7c25c2fa3a51" class=""><div class="indented"><p id="e5864e95-094a-4144-9fbf-b6f4447419ca" class="">
+</p></div></p><figure id="231be087-4f82-4499-af36-dec968ce992c" class="image"><a href="1%20%E1%84%83%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%90%E1%85%A5%20%E1%84%86%E1%85%A9%E1%84%83%E1%85%A6%E1%86%AF%E1%84%85%E1%85%B5%E1%86%BC%E1%84%8B%E1%85%B4%20%E1%84%8B%E1%85%B5%E1%84%92%E1%85%A2%202032f960cdf54b6eabe5d288d79871d0/Untitled%206.png"><img style="width:730px" src="1%20%E1%84%83%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%90%E1%85%A5%20%E1%84%86%E1%85%A9%E1%84%83%E1%85%A6%E1%86%AF%E1%84%85%E1%85%B5%E1%86%BC%E1%84%8B%E1%85%B4%20%E1%84%8B%E1%85%B5%E1%84%92%E1%85%A2%202032f960cdf54b6eabe5d288d79871d0/Untitled%206.png"/></a></figure><hr id="32e21761-2a59-4cf4-9e03-0bc9ae1d0a30"/><ul id="dcc76f6b-778c-4896-adcb-1f14c5d51f09" class="bulleted-list"><li style="list-style-type:disc">테이블 데이터 조회<ul id="a9501f34-2c73-4e68-8d27-2dd72da74356" class="bulleted-list"><li style="list-style-type:circle">‘=’로 들어온 조건에 해당하는 칼럼이 인덱스의 가장 앞쪽 위치하면 효율이 높음<ul id="282f6c31-a870-4e25-87de-5c56c115c796" class="bulleted-list"><li style="list-style-type:square">1순위 : ‘=’</li></ul><ul id="082cbeca-db84-4b90-aa63-fdb46c6440a6" class="bulleted-list"><li style="list-style-type:square">2순위 : ‘BETWEEN’ OR ‘≤’</li></ul></li></ul></li></ul><hr id="c701712d-9565-49bb-939e-c601b01ee27e"/><ul id="b74c0792-62f5-48f3-ae49-db84795c5049" class="bulleted-list"><li style="list-style-type:disc">외래키도 인덱스가 필요함 ㅇㅋ?</li></ul></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>
