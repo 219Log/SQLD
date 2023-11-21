@@ -1,0 +1,682 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>2-2.SQL 활용</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-interactiveBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="66ff6fea-3999-4733-96c0-104b014c0c9f" class="page sans"><header><h1 class="page-title">2-2.SQL 활용</h1><p class="page-description"></p></header><div class="page-body"><ul id="faaf472c-5d5b-4f96-974a-857568ae56b6" class="bulleted-list"><li style="list-style-type:disc">순수관계 연산자<ul id="414c0bcf-2c66-4063-b0cc-0a6553933812" class="bulleted-list"><li style="list-style-type:circle">SELECT , PROJECT, JOIN, DIVIDE</li></ul></li></ul><hr id="1f986995-3ab1-4ece-9843-98a2979196ed"/><ul id="47f916f2-10d9-4fc9-abd7-893922e378bf" class="bulleted-list"><li style="list-style-type:disc">쿼리해석<ul id="81ffd294-5da7-4727-800a-c6ca9af4d577" class="bulleted-list"><li style="list-style-type:circle">NOT EXIST절의 연관서브쿼리에서 X.고객ID = B.고객ID로 되어있어 하나만 비선호 컨텐츠만들어가도 모든 컨텐츠가 배제됨<ul id="ddd552af-fc17-4503-9d0b-47b7c781d8bd" class="bulleted-list"><li style="list-style-type:square">X.컨텐츠ID = B컨텐츠ID가 존재하지않아서</li></ul></li></ul><ul id="81706bfb-a602-483a-b876-9e0d02390bc0" class="bulleted-list"><li style="list-style-type:circle">조건문을 더 확인해보자</li></ul></li></ul><hr id="81f4ac28-80e4-4920-8600-6757c959333c"/><ul id="6b0a0676-13e0-44e8-8152-6f78f0369958" class="bulleted-list"><li style="list-style-type:disc">쿼리사용<ul id="694a6a9f-c482-4072-b1e3-e92f1db642d8" class="bulleted-list"><li style="list-style-type:circle">WHERE 절에도 조인조건 사용가능</li></ul></li></ul><hr id="fc4b7a74-68cb-4121-ba82-1a2862ebd7da"/><ul id="286fb54a-b949-4b9a-afbc-d80f572401a7" class="bulleted-list"><li style="list-style-type:disc">FULL OUTER JOIN <ul id="f943a948-31b2-48db-b41a-9b57fcf4318d" class="bulleted-list"><li style="list-style-type:circle">LEFT JOIN 과 RIGHT조인을 UINON으로하여 같은값이 가능</li></ul><ul id="4afd3d63-6021-4539-ae3b-09b03ca45340" class="bulleted-list"><li style="list-style-type:circle">INNER JOIN 조인후 A UNION ALL, B UNION ALL 조건에서
+불포함한다 겹치는 부분을 하여 값은값가능</li></ul><ul id="53a40a52-f72b-483f-9b0f-cfa3c3ec5598" class="bulleted-list"><li style="list-style-type:circle">A, B 의 전체의 값을 나타냄  </li></ul></li></ul><hr id="ef012381-3158-49d4-8f69-f5959e44b725"/><ul id="7aa94b8b-79f0-45df-b212-005eff48ed83" class="bulleted-list"><li style="list-style-type:disc">OUTER JOIN 문장<ul id="31933d14-0b2e-44e2-8eaa-746a01b5f836" class="bulleted-list"><li style="list-style-type:circle">왼 3 / 풀 5 / 오 4</li></ul><figure id="1450aee8-d4ab-49e2-b058-8c68fb40a07b" class="image"><a href="2-2%20SQL%20%E1%84%92%E1%85%AA%E1%86%AF%E1%84%8B%E1%85%AD%E1%86%BC%2066ff6fea3999473396c0104b014c0c9f/Untitled.png"><img style="width:293px" src="2-2%20SQL%20%E1%84%92%E1%85%AA%E1%86%AF%E1%84%8B%E1%85%AD%E1%86%BC%2066ff6fea3999473396c0104b014c0c9f/Untitled.png"/></a></figure></li></ul><hr id="58107c7f-9638-4f86-b87d-9b8aea5d1f1d"/><ul id="43081a0d-8ed8-4c44-8bf8-f92d6c5093b1" class="bulleted-list"><li style="list-style-type:disc">LEFT JOIN <ul id="9284dded-fd38-4e77-bb11-5ce6791d5db9" class="bulleted-list"><li style="list-style-type:circle">A LEFT JOIN B 의 경우 B가 값 이 없을경우 NULL 값으로  표현 되자나!!</li></ul></li></ul><hr id="9dccbfc6-55ef-43d3-b223-f22bcc654477"/><ul id="526af39d-da7d-4cf6-bf94-a1bfa9c111b7" class="bulleted-list"><li style="list-style-type:disc">집합 연산자의 종류<ul id="38f21905-11d2-4aa4-acf8-4a567cb689b6" class="bulleted-list"><li style="list-style-type:circle">UNION 합집합</li></ul><ul id="c1013606-1687-48cd-a54b-7e79b7555599" class="bulleted-list"><li style="list-style-type:circle">UNION ALL 합집합에 중복행그대로</li></ul><ul id="1a8607ee-cda7-4ce2-8054-3439e2fafb4d" class="bulleted-list"><li style="list-style-type:circle">INTERSECT 교집합</li></ul><ul id="ee59be5b-cf60-4a06-8955-6d0ae3e453f8" class="bulleted-list"><li style="list-style-type:circle">EXCEPT 차집합 MINUS 와 같음 </li></ul><figure id="d50c0c87-1d87-48b2-92e0-c8ea7937b399" class="image"><a href="2-2%20SQL%20%E1%84%92%E1%85%AA%E1%86%AF%E1%84%8B%E1%85%AD%E1%86%BC%2066ff6fea3999473396c0104b014c0c9f/Untitled%201.png"><img style="width:408px" src="2-2%20SQL%20%E1%84%92%E1%85%AA%E1%86%AF%E1%84%8B%E1%85%AD%E1%86%BC%2066ff6fea3999473396c0104b014c0c9f/Untitled%201.png"/></a></figure></li></ul><p id="d16c97a4-a258-4478-8ba0-cac51827776c" class="">
+</p><hr id="01b74471-a13c-4bc6-beb3-e5b8de4ab680"/><div id="f54648e6-7b3b-4994-8d9d-e2f2191fcea8" class="column-list"><div id="6f3ad585-c42a-49f1-b75b-cda276f5f085" style="width:33.33333333333333%" class="column"><ul id="dea42d13-a959-4f06-9c2f-2808007ab7ea" class="bulleted-list"><li style="list-style-type:disc">EXCEPT<ul id="5767525f-46c7-4a48-968f-b6d99ca6a078" class="bulleted-list"><li style="list-style-type:circle">해당 문제는 아래와 같이 풀이할 수 있다. </li></ul><p id="ae65c926-3b8e-4235-a411-edb77e209736" class="">
+</p></li></ul></div><div id="a7c94e06-2deb-4945-b096-dd99d5bdc190" style="width:16.666666666666664%" class="column"><figure id="cc2f24e8-0653-44a4-a4b5-9d47240978f2" class="image"><a href="2-2%20SQL%20%E1%84%92%E1%85%AA%E1%86%AF%E1%84%8B%E1%85%AD%E1%86%BC%2066ff6fea3999473396c0104b014c0c9f/Untitled%202.png"><img style="width:94px" src="2-2%20SQL%20%E1%84%92%E1%85%AA%E1%86%AF%E1%84%8B%E1%85%AD%E1%86%BC%2066ff6fea3999473396c0104b014c0c9f/Untitled%202.png"/></a></figure></div><div id="95ec4046-0721-4e3e-b44a-559aaa288267" style="width:49.999999999999986%" class="column"><figure id="d19b0cb8-1b95-4f00-b151-2a779aa9f213" class="image"><a href="2-2%20SQL%20%E1%84%92%E1%85%AA%E1%86%AF%E1%84%8B%E1%85%AD%E1%86%BC%2066ff6fea3999473396c0104b014c0c9f/Untitled%203.png"><img style="width:305px" src="2-2%20SQL%20%E1%84%92%E1%85%AA%E1%86%AF%E1%84%8B%E1%85%AD%E1%86%BC%2066ff6fea3999473396c0104b014c0c9f/Untitled%203.png"/></a></figure></div></div><ul id="3c7076f2-459e-48eb-9296-c9401381a4e0" class="bulleted-list"><li style="list-style-type:disc">EXCEPT는 NOT EXISTS()와 NOT IN으로 데이터 처리가 가능하다 <ul id="fb047e6c-d03a-44a2-98b9-1436419b1eab" class="bulleted-list"><li style="list-style-type:circle">하지만 한번에 이어져야하는데 NOT IN 같은 경우 두개로 나뉘어서 다른 결과가 나옴 </li></ul><ul id="c5639e7a-53fc-459e-869d-62a5960a979f" class="bulleted-list"><li style="list-style-type:circle">붙이 면같은값일텐데</li></ul></li></ul><hr id="faa9ce2d-c344-4c42-ad92-2178d55b1c77"/><ul id="ae7015dd-d22a-4747-814f-6e5cc290970f" class="bulleted-list"><li style="list-style-type:disc">INTERSECT<ul id="280bdb33-4ae0-434c-8362-8cf4d4661267" class="bulleted-list"><li style="list-style-type:circle">교집합이다 A,B 의 겹치는 부분 만 가져가려면 마이너스를 이용한다. <ul id="81dda6aa-bfa8-4033-9e8c-4c10dea9d972" class="bulleted-list"><li style="list-style-type:square">NOT IN (A MINUS B)</li></ul><ul id="e65a3c4c-5dc5-4cb2-84f6-4f96127e26e3" class="bulleted-list"><li style="list-style-type:square">NOT EXISTS(A MIUS B)</li></ul><ul id="07cc4397-efd8-44b8-9a93-2ef84e51bd3e" class="bulleted-list"><li style="list-style-type:square">IS NOT NULL 로 뺌</li></ul></li></ul></li></ul><hr id="0f5e96e0-518c-4ceb-a6c4-d106be28a42c"/><ul id="f8a4b47a-3df5-4daa-ba02-1a4a795e45c3" class="bulleted-list"><li style="list-style-type:disc">데이터 모델 설명<ul id="2e8e98f5-7877-49df-8397-5b63fb677582" class="bulleted-list"><li style="list-style-type:circle">1대1 관계에서 EXCEPT 는 공집합</li></ul><ul id="3bbb5506-b1ea-4ce6-b016-17132b226673" class="bulleted-list"><li style="list-style-type:circle">1대1 관계에서 UNION은 전체건수 2배</li></ul><ul id="3f0cf52b-bebe-4760-876d-0308d7041126" class="bulleted-list"><li style="list-style-type:circle">1대1 관계에서 INTERCEPT는 JOIN 과 UINON 과 같다</li></ul></li></ul><hr id="2aad7c42-3bd9-4814-96a0-521c18887a93"/><ul id="b8df9d77-5b37-427d-af88-f7ac7487bdd6" class="bulleted-list"><li style="list-style-type:disc">CONNECT BY<ul id="ac53c50f-1313-44e0-9ad3-d651d91ecc4b" class="bulleted-list"><li style="list-style-type:circle">WHERE 절에 작성된 조건절과 다름</li></ul><ul id="e2e9b25b-be8f-4a27-ac13-f5b42d7eb18c" class="bulleted-list"><li style="list-style-type:circle">START WITH 절에서 필터링된 시작데이터는 결과목록에 포함됨</li></ul><ul id="a87e28e0-b25f-4f56-b35d-d88464b924a6" class="bulleted-list"><li style="list-style-type:circle">CONNECT BY  PRIOR에 의해 필터링됨<ul id="48e1de33-b93e-406e-a348-7651a1596a9a" class="bulleted-list"><li style="list-style-type:square">널 로우부터 시작하여 비트윈 안에있는 값만 나오게함</li></ul></li></ul></li></ul><ul id="5ef0ccec-4437-4273-bed1-b7f37b23f497" class="bulleted-list"><li style="list-style-type:disc">PRIOR <ul id="faf17ea4-aed7-46fb-b674-153a297ff2db" class="bulleted-list"><li style="list-style-type:circle">CONNECT BY 절에 자주 사용되며 PRIOR에 지정된 컬럼이 맞은편 컬럼을 찾아감<ul id="57705e6e-5382-4642-8cf7-47742327766f" class="bulleted-list"><li style="list-style-type:square">WHERE 과 SELECT 절에도 사용됨</li></ul><ul id="bbcda1ac-6493-48ce-b9ca-9262e47b9c42" class="bulleted-list"><li style="list-style-type:square">PRIOR 자식 = 부모 순방향 \\\\ PRIOR부모 = 자식 역방향</li></ul></li></ul></li></ul><hr id="2399b3df-d1bb-46ac-85e8-ecde33a5f471"/><ul id="00943074-20a4-45e1-88e1-c82c0a34b110" class="bulleted-list"><li style="list-style-type:disc">계층형 질의문<ul id="0b11f927-4414-4f76-9ccd-93424c0825be" class="bulleted-list"><li style="list-style-type:circle">SQLServer에서의 계층형 질의문은 CTE를 재귀호출함으로 계층구조 전개</li></ul><ul id="0fe7a9f6-1d02-45d0-819c-30466152d45d" class="bulleted-list"><li style="list-style-type:circle">SQLServer에서의 계층형 질의문은 앵커 맴버를 실행하여 기본 결과 집합을 만들고 재귀 맴버를 지속적 실행한다.</li></ul><ul id="7b9b7692-232e-477d-acea-2a746787cf74" class="bulleted-list"><li style="list-style-type:circle"></li></ul><ul id="bd0da826-bb9c-4158-b11c-78184335539a" class="bulleted-list"><li style="list-style-type:circle">계층형데이터란<ul id="3ae62121-ec74-43f1-97bb-86a11f57da31" class="bulleted-list"><li style="list-style-type:square">동일 테이블에 계층적으로 상위와 하위데이터가 포함된 데이터를 말한다.</li></ul><ul id="4a9f1e4e-7975-4814-acdd-4b7fabf4608d" class="bulleted-list"><li style="list-style-type:square">예를들어 사원테이블에서 사원들사이에 사원 관리자 하위 관리자 단계적데이터</li></ul></li></ul></li></ul><hr id="99cf2ce6-8153-40ff-9598-080c23dfabec"/><ul id="3e008437-185a-4a25-955c-e8dd6e38ef64" class="bulleted-list"><li style="list-style-type:disc">계층형<ul id="4a96f857-b34a-4ad0-9b73-cd28cb87e5ae" class="bulleted-list"><li style="list-style-type:circle">역방향으로 조인하여 데이터를 가져오고 PRIOR 로 범위잡아서 </li></ul></li></ul><hr id="ff8b006d-fa1f-4b9e-8374-2da32fb90891"/><ul id="0dd39c5a-621a-44c9-a281-c24d990d8e50" class="bulleted-list"><li style="list-style-type:disc">메인쿼리와 서브쿼리<ul id="2249390a-ae34-42ab-a4c1-a6a5e3c9387b" class="bulleted-list"><li style="list-style-type:circle">서브쿼리는 단일행 또는 복수행 비교연산자와 같이 사용가능</li></ul><ul id="7d52cd10-d723-40bf-a9d5-b98846c42a26" class="bulleted-list"><li style="list-style-type:circle">복수행 결과 서브쿼리는 IN, ALL, ANY등 복수행 비교연산자와 사용</li></ul><ul id="39aad113-6ef6-40fa-ba56-29b472fc4818" class="bulleted-list"><li style="list-style-type:circle">서브쿼리는 SELECT, FROM, HAVING, ORDER BY  절에서 사용가능하다</li></ul><ul id="3da6fcf0-64a0-49fe-afa6-6916f832f42e" class="bulleted-list"><li style="list-style-type:circle">다중컬럼 서브쿼리는 SQLServer에서 사용 불가능</li></ul></li></ul><figure id="b73c78aa-5165-43b2-937a-cec7083fc614" class="image"><a href="2-2%20SQL%20%E1%84%92%E1%85%AA%E1%86%AF%E1%84%8B%E1%85%AD%E1%86%BC%2066ff6fea3999473396c0104b014c0c9f/Untitled%204.png"><img style="width:412px" src="2-2%20SQL%20%E1%84%92%E1%85%AA%E1%86%AF%E1%84%8B%E1%85%AD%E1%86%BC%2066ff6fea3999473396c0104b014c0c9f/Untitled%204.png"/></a></figure><hr id="e75c4d86-564b-4ca1-b7f3-91b20f1da6eb"/><ul id="5a457ef5-9d7d-4178-816e-e5dfa1ca9f42" class="bulleted-list"><li style="list-style-type:disc">NOT EXISTS()<ul id="5216236b-fa6a-4b94-8b1d-bf4a91926c55" class="bulleted-list"><li style="list-style-type:circle">괄호안에 있는것을 빼고 출력한다.</li></ul><ul id="83b38695-7829-4b7c-80f7-696e5d76ecaa" class="bulleted-list"><li style="list-style-type:circle">재외된 항목에 대한 내역은 3가지를 통해 표현가능 </li></ul><figure id="f5cd23e8-6dfa-4034-8f59-85e98dd90d4d" class="image"><a href="2-2%20SQL%20%E1%84%92%E1%85%AA%E1%86%AF%E1%84%8B%E1%85%AD%E1%86%BC%2066ff6fea3999473396c0104b014c0c9f/Untitled%205.png"><img style="width:422px" src="2-2%20SQL%20%E1%84%92%E1%85%AA%E1%86%AF%E1%84%8B%E1%85%AD%E1%86%BC%2066ff6fea3999473396c0104b014c0c9f/Untitled%205.png"/></a></figure></li></ul><hr id="ce17a0c7-e1e9-4fc5-88cd-bf50c7e677d2"/><ul id="7bf130dd-6ca3-4b1e-b350-0a3d587e1ecc" class="bulleted-list"><li style="list-style-type:disc">GROUP BY<ul id="c5abf019-f454-4236-bc87-a77a0534b821" class="bulleted-list"><li style="list-style-type:circle">사용하지 않고 HAVING 을 사용했다고 문장에 오류가 발생하지 않는다.</li></ul></li></ul><hr id="c5631a06-cf0a-4d97-bec5-6ae8b4ea586d"/><ul id="bc557fad-eec3-4874-96a5-4b8c78b4de94" class="bulleted-list"><li style="list-style-type:disc">뷰<ul id="eb14ad46-5be8-4060-8f93-30612c751c45" class="bulleted-list"><li style="list-style-type:circle">독립성<ul id="df0df53a-3ce6-4f83-997b-df07eedf49b4" class="bulleted-list"><li style="list-style-type:square">데이블 구조가 변경되어도 사용 응용프로그램 변형하지 않아도 됨</li></ul></li></ul><ul id="23b7de13-dfd5-4fd1-a34f-f883fec88733" class="bulleted-list"><li style="list-style-type:circle">편리성<ul id="143cb18c-d6fa-46d7-ae4b-e3cde3583d89" class="bulleted-list"><li style="list-style-type:square">복잡한 질의를 뷰로 생성함으로써 관련 질의를 단순하게 작성할 수 있다. </li></ul><ul id="9fbd356e-cf71-4657-94f9-21b77dc6bf02" class="bulleted-list"><li style="list-style-type:square">해당 SQL문을자주 사용할 때 뷰를 이용하면 편리하게 사용할 수 있다.</li></ul></li></ul><ul id="1d226511-2a56-45de-88e9-8cace3ce85e8" class="bulleted-list"><li style="list-style-type:circle">보안성<ul id="4a1c7f62-32a1-4a2d-8be7-8d1a53354425" class="bulleted-list"><li style="list-style-type:square">직원의 급여정보와 같이 숨기고 싶은 정보가 존재한다면 뷰에서 컬럼을 뺀다</li></ul></li></ul><ul id="d17a857b-beb7-4aa5-9a4a-9c9137be7e80" class="bulleted-list"><li style="list-style-type:circle">뷰는 단지 정의만 가지고 있어서 실생시점에서 질의를 재작성하여 수행함</li></ul><ul id="0ca60e05-3985-46b6-ab44-6c60038959d6" class="bulleted-list"><li style="list-style-type:circle">보안으로사용함</li></ul><ul id="06844565-a2c4-4366-82c9-225ad4501e15" class="bulleted-list"><li style="list-style-type:circle">뷰 기능 생성 DBMS 존재</li></ul></li></ul><hr id="462a53e0-416d-4bd8-ac29-2845bb57f4c7"/><ul id="e46f90a6-89e2-4602-8fb4-2d4e66d75eca" class="bulleted-list"><li style="list-style-type:disc">GROUP BY ROLLUP<ul id="63fc2cf5-f8ff-4b63-9707-f216284198ee" class="bulleted-list"><li style="list-style-type:circle">각 그룹별 토탈하여 모으고 집계함수를 사용해야한다 (마지막 카운트 함수라던지) </li></ul><ul id="49e6aadd-92f2-40a5-8737-d15d2621b3b7" class="bulleted-list"><li style="list-style-type:circle">CASE 절 GROUPING()<ul id="3185e676-5cb9-419a-abb6-a57c29dc7770" class="bulleted-list"><li style="list-style-type:square">GROUPING <ul id="1d9ede8a-9af2-4600-8867-58b77f2497c6" class="bulleted-list"><li style="list-style-type:disc">해당 컬럼의 Row가 GROUP BY에 의해서 산출된 Row인 경우에는 0</li></ul><ul id="4ee8919e-307a-468f-9d40-416606051990" class="bulleted-list"><li style="list-style-type:disc">ROLLUP이나 CUBE에 의해서 산출된 Row인 경우에는 1을 반환</li></ul></li></ul></li></ul></li></ul><hr id="04aec8eb-36f8-436d-9e6f-7f69f9129c76"/><div id="a466f07a-d6ea-4da9-93a8-fcce4b2faaec" class="column-list"><div id="8b7936f4-3b96-47bf-b40e-3ab6dc8f1183" style="width:50%" class="column"><ul id="e823c380-27c7-44ce-bc21-6976a141e384" class="bulleted-list"><li style="list-style-type:disc">grouping sets<ul id="682d1bc6-6c12-4985-ac9b-775c5a702c1a" class="bulleted-list"><li style="list-style-type:circle">집계함수를 보다 편하게</li></ul><ul id="977e013f-47b3-4944-8d05-6db83b6a3dad" class="bulleted-list"><li style="list-style-type:circle">같은말임</li></ul><figure id="60732aaa-f6f9-40e9-9933-43239af0f616" class="image"><a href="2-2%20SQL%20%E1%84%92%E1%85%AA%E1%86%AF%E1%84%8B%E1%85%AD%E1%86%BC%2066ff6fea3999473396c0104b014c0c9f/Untitled%206.png"><img style="width:369px" src="2-2%20SQL%20%E1%84%92%E1%85%AA%E1%86%AF%E1%84%8B%E1%85%AD%E1%86%BC%2066ff6fea3999473396c0104b014c0c9f/Untitled%206.png"/></a></figure><p id="ac2e9e77-64e2-467f-9d2b-23e9c6cc8e37" class="">
+</p><p id="a5264862-534d-46da-b9cd-75831b5f0c1d" class="">그룹핑에 괄호가 더있음 그루핑</p></li></ul></div><div id="2a32d3c5-b781-41c9-bbb3-da5aaa811f75" style="width:50%" class="column"><figure id="01829ee5-172f-41a0-bbb3-9ec2fc34d2ff" class="image"><a href="2-2%20SQL%20%E1%84%92%E1%85%AA%E1%86%AF%E1%84%8B%E1%85%AD%E1%86%BC%2066ff6fea3999473396c0104b014c0c9f/Untitled%207.png"><img style="width:327px" src="2-2%20SQL%20%E1%84%92%E1%85%AA%E1%86%AF%E1%84%8B%E1%85%AD%E1%86%BC%2066ff6fea3999473396c0104b014c0c9f/Untitled%207.png"/></a></figure></div></div><hr id="6455adf0-d993-47cf-a6b5-597fbb604f57"/><ul id="a2efece4-8060-4ae9-b243-2e7379feb972" class="bulleted-list"><li style="list-style-type:disc">윈도우 함수<ul id="0ff95cbb-8205-4eb7-9920-e4b0900be4ec" class="bulleted-list"><li style="list-style-type:circle">partition과 group by 구문은 유사함</li></ul><ul id="5405cfe8-729d-4fb3-a575-1cf9647fbd99" class="bulleted-list"><li style="list-style-type:circle">partition 구문이 없으면 전체 집합을 하나로 partition으로 정의한것과 동일하다.</li></ul><ul id="26edc056-fc95-4422-8ccd-222bdb43c226" class="bulleted-list"><li style="list-style-type:circle">윈도우함수 처리로 인해 결과 건수는 줄지 않는다.</li></ul><ul id="9acfb11a-5493-4485-85a2-6e76372ebe44" class="bulleted-list"><li style="list-style-type:circle">윈도우 함수 적용 범위는 partition 을 넘을수 없다.</li></ul><ul id="78c70694-a2d9-4b9f-80fa-ce5983d48223" class="bulleted-list"><li style="list-style-type:circle">partition by a order by b desc<ul id="4bf4c6bb-e85a-49f0-9e08-16c830e9ed56" class="bulleted-list"><li style="list-style-type:square">파티션별 비 에서 가장 높은걸 뽑는다 </li></ul><ul id="37edf430-5709-4a56-b10c-9b39fcd3579a" class="bulleted-list"><li style="list-style-type:square">이순신 중에서 90 과 80이 있으면 90을 출력 ㅇㅋ</li></ul></li></ul><ul id="8ab37a63-fa0c-467d-b065-93e5ed7c55b5" class="bulleted-list"><li style="list-style-type:circle">윈도우 함수  order by 에 집계함수 쌉가능</li></ul><ul id="cefbf3b5-585f-46f3-8557-0517a0be4c2e" class="bulleted-list"><li style="list-style-type:circle"></li></ul></li></ul><hr id="a311a974-3189-4a20-9b45-b123ec03f161"/><ul id="d571bf8e-13dc-4fa5-b8a1-afd76903ed63" class="bulleted-list"><li style="list-style-type:disc">DCL<ul id="9e9b5ef7-4f80-4edc-a073-31220b69b735" class="bulleted-list"><li style="list-style-type:circle">GRANT<ul id="2c99c967-aee0-4430-9086-92efb3a0962f" class="bulleted-list"><li style="list-style-type:square">권한 부여</li></ul></li></ul><ul id="31d86d0c-30d1-42a4-a231-1526d75c0b1c" class="bulleted-list"><li style="list-style-type:circle">REVOKE<ul id="581a8c92-ee7c-4d1b-906b-41d80992c67b" class="bulleted-list"><li style="list-style-type:square">권한 회수</li></ul></li></ul><ul id="6cd5ccf6-ec3c-446f-ac33-8f7606e332f7" class="bulleted-list"><li style="list-style-type:circle">예시</li></ul><figure id="97a60dc1-f99d-4116-a7d3-0b37751cee38" class="image"><a href="2-2%20SQL%20%E1%84%92%E1%85%AA%E1%86%AF%E1%84%8B%E1%85%AD%E1%86%BC%2066ff6fea3999473396c0104b014c0c9f/Untitled%208.png"><img style="width:298px" src="2-2%20SQL%20%E1%84%92%E1%85%AA%E1%86%AF%E1%84%8B%E1%85%AD%E1%86%BC%2066ff6fea3999473396c0104b014c0c9f/Untitled%208.png"/></a></figure></li></ul><hr id="58579975-ec9a-4835-bbbe-cf4ba9b11b84"/><ul id="cccc834c-bd51-477b-853e-5a1cc976bce2" class="bulleted-list"><li style="list-style-type:disc">ROLE<ul id="371586cf-a6c7-4835-a554-6377208428a2" class="bulleted-list"><li style="list-style-type:circle">많은 DBMS 사용자에게 개별적을 많은 권한을 부여하는 번거로움과 어려움를 해ㅅ하기 위한 다양한 권한을 하나의 그룹으로 묶어 놓은 논리적인 권한그룹</li></ul></li></ul><hr id="0e271ffa-54a3-4bd7-8902-dc61275d3a3d"/><ul id="98f77895-29b9-4bf9-b521-d87d598136d9" class="bulleted-list"><li style="list-style-type:disc">EXEUTE IMMEDIATE<ul id="ab5fb3e2-0ef1-4c59-b014-102b410222b6" class="bulleted-list"><li style="list-style-type:circle">DDL이나 PL/SQL이 문장을 실행할 때 사용</li></ul></li></ul><hr id="bd601268-e9fd-4cc1-a3d1-a7de1dc52a78"/><ul id="255acd09-6ce8-42d9-924e-3796d7f4cbde" class="bulleted-list"><li style="list-style-type:disc">저장 모듈(Stored Module)구현<ul id="21433637-8da4-4bf7-b8e6-451aea57d1b2" class="bulleted-list"><li style="list-style-type:circle">3가지를 구현 가능하다</li></ul><ul id="edde4808-f53c-4767-9128-a10490a47548" class="bulleted-list"><li style="list-style-type:circle">저장형 프로시저는 sql 로직과 함께 데이터베이스내에 저장해 놓은 명령문의 집합</li></ul><ul id="8d3e0e6f-f18c-40b8-a91f-b170b2b2f532" class="bulleted-list"><li style="list-style-type:circle">저장형 함수(사용자 정의함수)는 단독적으로 실행되기보다는 sql 문을 통하여 호출되고 그결과를 리턴하는 sql의 보조적인 역할</li></ul><ul id="cb63bfed-d9ff-48b2-9b8e-4c34841b2af0" class="bulleted-list"><li style="list-style-type:circle">트리거는 특정한 테이블에 인업데 문이 dml문이 수행되었을 때 자동으로 동작</li></ul><p id="2ff3e4a3-5367-47da-aceb-462d3a5a54ba" class="">
+</p><ul id="b06baf85-cde2-4e26-aeb4-8c52db2e987d" class="bulleted-list"><li style="list-style-type:circle">트리거 : 데이터 무결성과 일관성을 위해서 사용자 함수를 사용한다.</li></ul><ul id="ff373489-1497-4591-b69b-25cfae19eb7d" class="bulleted-list"><li style="list-style-type:circle">트리거는 TCL 사용불가능</li></ul></li></ul><hr id="1be02281-f533-4964-909b-3b3d3c4c4854"/><p id="e67922b1-de88-485f-ada5-8bdb0388435e" class="">
+</p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>
